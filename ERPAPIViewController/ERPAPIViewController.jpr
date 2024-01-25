@@ -168,6 +168,20 @@
          <string v="ERPSolDeployAPI"/>
       </list>
    </hash>
+   <hash n="oracle.jdeveloper.model.J2eeSettings">
+      <value n="j2eeWebAppName" v="ERPSolDeployAPI"/>
+      <value n="j2eeWebContextRoot" v="ERPSolDeployAPI"/>
+   </hash>
+   <hash n="oracle.jdeveloper.runner.RunConfigurations">
+      <hash n="runConfigurationDefinitions">
+         <hash n="Default">
+            <value n="custom" v="false"/>
+            <value n="name" v="Default"/>
+            <value n="runActiveFile" v="false"/>
+            <url n="targetURL" path="src/erpdeployapi/erpapiview/deployapi/ERPSolDeployAPI.java"/>
+         </hash>
+      </hash>
+   </hash>
    <hash n="oracle.jdevimpl.config.JProjectLibraries">
       <list n="exportedReferences">
          <hash>

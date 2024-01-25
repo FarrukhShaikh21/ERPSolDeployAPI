@@ -12,7 +12,7 @@ import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 import oracle.jbo.client.Configuration;
 
-@Path("deployapi")
+@Path("erpapiview")
 public class ERPSolDeployAPI {
     public ERPSolDeployAPI() {
         super();
