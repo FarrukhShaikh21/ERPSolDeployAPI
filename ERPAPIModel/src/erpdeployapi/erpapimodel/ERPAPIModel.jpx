@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!DOCTYPE JboProject SYSTEM "jbo_03_01.dtd">
+<!---->
+<JboProject
+  xmlns="http://xmlns.oracle.com/bc4j"
+  Name="ERPAPIModel"
+  Version="12.1.3.10.47"
+  SeparateXMLFiles="true"
+  PackageName="erpdeployapi.erpapimodel">
+  <DesignTime>
+    <Attr Name="_jprName" Value="../../../ERPAPIModel.jpr"/>
+    <Attr Name="_jbo.TypeMapEntries" Value="OracleApps"/>
+    <Attr Name="_NamedConnection" Value="ERPDeployApiConn"/>
+    <Attr Name="_appModuleNames0" Value="erpdeployapi.erpapimodel.erpapiam.ERPAPIAppModule"/>
+  </DesignTime>
+  <Containee
+    Name="erpapiam"
+    PackageName="erpdeployapi.erpapimodel.erpapiam"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_AM" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="erpapieo"
+    PackageName="erpdeployapi.erpapimodel.erpapieo"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_EO" Value="true"/>
+    </DesignTime>
+  </Containee>
+  <Containee
+    Name="erpapivo"
+    PackageName="erpdeployapi.erpapimodel.erpapivo"
+    ObjectType="JboPackage">
+    <DesignTime>
+      <Attr Name="_VO" Value="true"/>
+    </DesignTime>
+  </Containee>
+</JboProject>
