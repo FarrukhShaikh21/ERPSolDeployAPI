@@ -10,4 +10,7 @@
   <ViewUsage
     Name="VwCustomerApiRO"
     ViewObjectName="erpdeployapi.erpapimodel.erpapivo.VwCustomerApiVO"/>
+  <ViewUsage
+    Name="VwSaleApiRO"
+    ViewObjectName="erpdeployapi.erpapimodel.erpapivo.VwSaleApiVO"/>
 </AppModule>

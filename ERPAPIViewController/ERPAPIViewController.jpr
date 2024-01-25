@@ -88,7 +88,7 @@
    </hash>
    <hash n="oracle.jdeveloper.deploy.dt.DeploymentProfiles">
       <hash n="profileDefinitions">
-         <hash n="ERPDeployAPI_ERPAPIViewController_webapp">
+         <hash n="ERPSolDeployAPI">
             <hash n="appletArchives"/>
             <hash n="appletFiles">
                <value n="autoInclude" v="true"/>
@@ -99,7 +99,8 @@
             <hash n="archiveOptions">
                <value n="hasManifest" v="false"/>
             </hash>
-            <value n="enterpriseAppName" v="ERPDeployAPI_ERPAPIViewController_webapp"/>
+            <value n="contextRoot" v="ERPSolDeployAPI"/>
+            <value n="enterpriseAppName" v="ERPSolDeployAPI"/>
             <hash n="fileGroups">
                <list n="groups">
                   <hash>
@@ -158,13 +159,13 @@
                   </hash>
                </list>
             </hash>
-            <url n="jarURL" path="deploy/ERPDeployAPI_ERPAPIViewController_webapp.war"/>
+            <url n="jarURL" path="deploy/ERPSolDeployAPI.war"/>
             <value n="profileClass" v="oracle.jdeveloper.deploy.war.WarProfile"/>
-            <value n="profileName" v="ERPDeployAPI_ERPAPIViewController_webapp"/>
+            <value n="profileName" v="ERPSolDeployAPI"/>
          </hash>
       </hash>
       <list n="profileList">
-         <string v="ERPDeployAPI_ERPAPIViewController_webapp"/>
+         <string v="ERPSolDeployAPI"/>
       </list>
    </hash>
    <hash n="oracle.jdevimpl.config.JProjectLibraries">
