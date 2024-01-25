@@ -8,6 +8,6 @@
   InheritPersonalization="merge"
   ClearCacheOnRollback="true">
   <ViewUsage
-    Name="AllCustomersVO1"
-    ViewObjectName="erpdeployapi.erpapimodel.erpapivo.AllCustomersVO"/>
+    Name="VwCustomerApiRO"
+    ViewObjectName="erpdeployapi.erpapimodel.erpapivo.VwCustomerApiVO"/>
 </AppModule>

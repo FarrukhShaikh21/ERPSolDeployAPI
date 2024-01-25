@@ -23,6 +23,11 @@
     <servlet-name>MapProxyServlet</servlet-name>
     <servlet-class>oracle.adf.view.faces.bi.webapp.MapProxyServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>jersey</servlet-name>
+    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
   <servlet-mapping>
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>/faces/*</url-pattern>
@@ -50,6 +55,10 @@
   <servlet-mapping>
     <servlet-name>resources</servlet-name>
     <url-pattern>/bi/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>jersey</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
   </servlet-mapping>
   <filter>
     <filter-name>trinidad</filter-name>

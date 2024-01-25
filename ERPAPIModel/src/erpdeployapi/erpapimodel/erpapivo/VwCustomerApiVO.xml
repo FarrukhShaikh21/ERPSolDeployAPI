@@ -104,4 +104,10 @@
     EntityAttrName="DivisionName"
     EntityUsage="VwCustomerApi"
     AliasName="DIVISION_NAME"/>
+  <ViewAttribute
+    Name="LocationName"
+    PrecisionRule="true"
+    EntityAttrName="LocationName"
+    EntityUsage="VwCustomerApi"
+    AliasName="LOCATION_NAME"/>
 </ViewObject>
