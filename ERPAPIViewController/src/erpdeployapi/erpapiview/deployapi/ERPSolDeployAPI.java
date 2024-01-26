@@ -12,7 +12,7 @@ import oracle.jbo.Row;
 import oracle.jbo.ViewObject;
 import oracle.jbo.client.Configuration;
 
-@Path("erpapiview")
+@Path("deployapi")
 public class ERPSolDeployAPI {
     public ERPSolDeployAPI() {
         super();
@@ -26,6 +26,9 @@ public class ERPSolDeployAPI {
     @Path("/getDeployCustomer")
     public String getDeployCustomer(@QueryParam("pApiAuthKey") String pApiAuthKey) {
                    System.out.println("hello");
+                   if (pApiAuthKey==null || !(pApiAuthKey.equals(DEPLOYAPIACCESSKEY))) {
+           return "{\n \"ReturnCode\":\"00\",\"CustomerInfoResult\":[" + "\"Not Authorized\"" + "]\n}";
+       }
                              ADFContext oldContext = ADFContext.initADFContext(null, null, null, null);
                              String countryinfo = null;
                              try {
@@ -43,14 +46,14 @@ public class ERPSolDeployAPI {
                                              "\",\"Customerid\":\"" + r.getAttribute("Customerid") +
                                              "\",\"AccountOpeningDate\":\"" + r.getAttribute("AcOpeningDate") + "\"" +
                                              ",\"Location\":\"" + r.getAttribute("Locationid") + "\"" +
-                                             ",\"Address\":\"" +r.getAttribute("Address") + 
-                                         ",\"SalespersonName\":\"" +r.getAttribute("Name") + 
-                                         ",\"TerritoryName\":\"" +r.getAttribute("TerritoryName") + 
-                                         ",\"SalesterritoryId\":\"" +r.getAttribute("Salesterritoryid") + 
-                                         ",\"SalespersonId\":\"" +r.getAttribute("Salespersonid") +     
-                                         ",\"DivisionId\":\"" +r.getAttribute("Divid") +     
-                                         ",\"DivisionName\":\"" +r.getAttribute("DivisionName") + 
-                                         ",\"DefaultPerson\":\"" +r.getAttribute("DefaultPerson") + 
+                                             ",\"Address\":\"" +r.getAttribute("Address") + "\"" +
+                                         ",\"SalespersonName\":\"" +r.getAttribute("Name") + "\"" +
+                                         ",\"TerritoryName\":\"" +r.getAttribute("TerritoryName") + "\"" +
+                                         ",\"SalesterritoryId\":\"" +r.getAttribute("Salesterritoryid") + "\"" +
+                                         ",\"SalespersonId\":\"" +r.getAttribute("Salespersonid") + "\"" +    
+                                         ",\"DivisionId\":\"" +r.getAttribute("Divid") + "\"" +    
+                                         ",\"DivisionName\":\"" +r.getAttribute("DivisionName") + "\"" +
+                                         ",\"DefaultPerson\":\"" +r.getAttribute("DefaultPerson") + "\"" +
                                           ",\"CnicNo\":\"" + r.getAttribute("CnicNo") +
                                              "\"}";
                                          ////  System.out.println(countryinfo);
@@ -60,14 +63,14 @@ public class ERPSolDeployAPI {
                                          "\",\"Customerid\":\"" + r.getAttribute("Customerid") +
                                          "\",\"AccountOpeningDate\":\"" + r.getAttribute("AcOpeningDate") + "\"" +
                                          ",\"Location\":\"" + r.getAttribute("Locationid") + "\"" +
-                                         ",\"Address\":\"" +r.getAttribute("Address") + 
-                                         ",\"SalespersonName\":\"" +r.getAttribute("Name") +
-                                         ",\"TerritoryName\":\"" +r.getAttribute("TerritoryName") +
-                                         ",\"SalesterritoryId\":\"" +r.getAttribute("Salesterritoryid") +
-                                         ",\"SalespersonId\":\"" +r.getAttribute("Salespersonid") +
-                                         ",\"DivisionId\":\"" +r.getAttribute("Divid") +
-                                         ",\"DivisionName\":\"" +r.getAttribute("DivisionName") +
-                                         ",\"DefaultPerson\":\"" +r.getAttribute("DefaultPerson") +
+                                         ",\"Address\":\"" +r.getAttribute("Address") + "\"" +
+                                         ",\"SalespersonName\":\"" +r.getAttribute("Name") +"\"" +
+                                         ",\"TerritoryName\":\"" +r.getAttribute("TerritoryName") +"\"" +
+                                         ",\"SalesterritoryId\":\"" +r.getAttribute("Salesterritoryid") +"\"" +
+                                         ",\"SalespersonId\":\"" +r.getAttribute("Salespersonid") +"\"" +
+                                         ",\"DivisionId\":\"" +r.getAttribute("Divid") +"\"" +
+                                         ",\"DivisionName\":\"" +r.getAttribute("DivisionName") +"\"" +
+                                         ",\"DefaultPerson\":\"" +r.getAttribute("DefaultPerson") +"\"" +
                                          ",\"CnicNo\":\"" + r.getAttribute("CnicNo") +
                                          "\"}";
                                          
@@ -87,7 +90,11 @@ public class ERPSolDeployAPI {
     @GET
     @Produces("application/json")
     @Path("/getDeploySale")
-    public String getDeploySale(@QueryParam("pApiAuthKey") String pApiAuthKey) {
+    public String getDeploySale(@QueryParam("pApiAuthKey") String pApiAuthKey,
+                                @QueryParam("pStartDate") String pStartDate, @QueryParam("pEndDate") String pEndDate) {
+                       if (pApiAuthKey==null || !(pApiAuthKey.equals(DEPLOYAPIACCESSKEY))) {
+                           return "{\n \"ReturnCode\":\"00\",\"SaleInfoResult\":[" + "\"Not Authorized\"" + "]\n}";
+                       }
                        System.out.println("hello");
                                  ADFContext oldContext = ADFContext.initADFContext(null, null, null, null);
                                  String countryinfo = null;
@@ -97,6 +104,9 @@ public class ERPSolDeployAPI {
                                      String config = "ERPAPIAppModuleLocal";
                                      ApplicationModule am = Configuration.createRootApplicationModule(amDef, config);
                                      ViewObject vo = am.findViewObject("VwSaleApiRO");
+                                     vo.setWhereClause("Sale_Date between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')");
+                                     System.out.println(vo.getWhereClause());
+                                     vo.executeQuery();
                                      vo.setRangeSize(-1);
                                      while (vo.hasNext()) {
                                          Row r = vo.next();
@@ -145,6 +155,7 @@ public class ERPSolDeployAPI {
                                  String result = "{\n \"ReturnCode\":\"00\",\"SaleInfoResult\":[" + countryinfo + " \n]\n}";
                                  return result;
                    }
+    
         
     }
 
