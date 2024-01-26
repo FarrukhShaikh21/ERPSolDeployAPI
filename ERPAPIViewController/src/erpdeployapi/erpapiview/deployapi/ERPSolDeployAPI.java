@@ -148,6 +148,9 @@ public class ERPSolDeployAPI {
                                      // Work with your appmodule and view object here
                                      Configuration.releaseRootApplicationModule(am, true);
                                      System.out.println("this is wscalling-end");
+                                 } 
+                                 catch(Exception ex){
+                                     return "{\n \"ReturnCode\":\"00\",\"CustomerInfoResult\":[" + "\"InvalidDateParameters\"" + "]\n}";
                                  } finally {
                                      ADFContext.resetADFContext(oldContext);
                                  }
