@@ -104,7 +104,7 @@ public class ERPSolDeployAPI {
                                      String config = "ERPAPIAppModuleLocal";
                                      ApplicationModule am = Configuration.createRootApplicationModule(amDef, config);
                                      ViewObject vo = am.findViewObject("VwSaleApiRO");
-                                     vo.setWhereClause("Sale_Date between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')");
+                                     vo.setWhereClause("Sale_Date between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') - TO_DATE('"+pStartDate+"','yyyy-mm-dd')<=1");
                                      System.out.println(vo.getWhereClause());
                                      vo.executeQuery();
                                      vo.setRangeSize(-1);
