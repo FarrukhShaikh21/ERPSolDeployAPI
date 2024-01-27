@@ -3,44 +3,44 @@
 <!---->
 <Entity
   xmlns="http://xmlns.oracle.com/bc4j"
-  Name="VwSaleApi"
+  Name="VwSaleReturnApi"
   Version="12.1.3.10.47"
   InheritPersonalization="merge"
   DBObjectType="table"
-  DBObjectName="VW_SALE_API"
-  AliasName="VwSaleApi"
+  DBObjectName="VW_SALE_RETURN_API"
+  AliasName="VwSaleReturnApi"
   BindingStyle="OracleName">
   <Attribute
-    Name="Salesorderid"
+    Name="Salesretid"
     IsNotNull="true"
     Precision="20"
-    ColumnName="SALESORDERID"
+    ColumnName="SALESRETID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API"
+    TableName="VW_SALE_RETURN_API"
     PrimaryKey="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="20"/>
     </DesignTime>
   </Attribute>
   <Attribute
-    Name="SaleDate"
-    ColumnName="SALE_DATE"
+    Name="SaleRetDate"
+    ColumnName="SALE_RET_DATE"
     SQLType="DATE"
     Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="VW_SALE_API"/>
+    TableName="VW_SALE_RETURN_API"/>
   <Attribute
     Name="Storeid"
-    Precision="20"
+    Precision="15"
     ColumnName="STOREID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API">
+    TableName="VW_SALE_RETURN_API">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="20"/>
+      <Attr Name="_DisplaySize" Value="15"/>
     </DesignTime>
   </Attribute>
   <Attribute
@@ -50,7 +50,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API">
+    TableName="VW_SALE_RETURN_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="4000"/>
     </DesignTime>
@@ -62,7 +62,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API">
+    TableName="VW_SALE_RETURN_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="15"/>
     </DesignTime>
@@ -74,20 +74,19 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API">
+    TableName="VW_SALE_RETURN_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="4000"/>
     </DesignTime>
   </Attribute>
   <Attribute
     Name="Salespersonid"
-    IsNotNull="true"
     Precision="20"
     ColumnName="SALESPERSONID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API">
+    TableName="VW_SALE_RETURN_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="20"/>
     </DesignTime>
@@ -99,33 +98,31 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API">
+    TableName="VW_SALE_RETURN_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="4000"/>
     </DesignTime>
   </Attribute>
   <Attribute
     Name="Location"
-    IsNotNull="true"
     Precision="15"
     ColumnName="LOCATION"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API">
+    TableName="VW_SALE_RETURN_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="15"/>
     </DesignTime>
   </Attribute>
   <Attribute
     Name="Productid"
-    IsNotNull="true"
     Precision="15"
     ColumnName="PRODUCTID"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API"
+    TableName="VW_SALE_RETURN_API"
     PrimaryKey="true">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="15"/>
@@ -138,41 +135,43 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API">
+    TableName="VW_SALE_RETURN_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="20"/>
     </DesignTime>
   </Attribute>
   <Attribute
     Name="Quantity"
+    Precision="7"
+    Scale="0"
     ColumnName="QUANTITY"
     SQLType="NUMERIC"
-    Type="java.math.BigDecimal"
+    Type="java.lang.Integer"
     ColumnType="NUMBER"
-    TableName="VW_SALE_API"/>
+    TableName="VW_SALE_RETURN_API"/>
   <Attribute
     Name="ImeiNo"
-    Precision="30"
+    Precision="20"
     ColumnName="IMEI_NO"
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_SALE_API"
+    TableName="VW_SALE_RETURN_API"
     PrimaryKey="true">
     <DesignTime>
-      <Attr Name="_DisplaySize" Value="30"/>
+      <Attr Name="_DisplaySize" Value="20"/>
     </DesignTime>
   </Attribute>
   <Key
-    Name="VwsaleapiPrimaryKey"
+    Name="VwsalereturnapiPrimaryKey"
     PrimaryKey="true">
     <DesignTime>
-      <Attr Name="_DBObjectName" Value="VWSALEAPI_PRIMARY_KEY"/>
+      <Attr Name="_DBObjectName" Value="VWSALERETURNAPI_PRIMARY_KEY"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwSaleApi.Salesorderid"/>
-      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwSaleApi.Productid"/>
-      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwSaleApi.ImeiNo"/>
+      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwSaleReturnApi.Salesretid"/>
+      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwSaleReturnApi.Productid"/>
+      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwSaleReturnApi.ImeiNo"/>
     </AttrArray>
   </Key>
 </Entity>
