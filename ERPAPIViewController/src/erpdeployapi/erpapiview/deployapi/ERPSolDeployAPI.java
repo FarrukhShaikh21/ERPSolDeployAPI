@@ -284,8 +284,16 @@ public class ERPSolDeployAPI {
                                      String result = "{\n \"ReturnCode\":\"00\",\"SaleReturnInfoResult\":[" + countryinfo + " \n]\n}";
                                      return result;
                        } 
-    
-        public String getLatestSale(String pApiAuthKey,String pCustomerId,String pProductId,String pDivId, String pGroupId, String pStartDate, String pEndDate) {
+        @GET
+        @Produces("application/json")
+        @Path("/getLatestSale")
+        public String getLatestSale(@QueryParam("pApiAuthKey")String pApiAuthKey,
+                                    @QueryParam("pCustomerId")String pCustomerId,
+                                    @QueryParam("pProductId") String pProductId,
+                                    @QueryParam("pDivId") String pDivId,
+                                    @QueryParam("pGroupId") String pGroupId, 
+                                    @QueryParam("pStartDate") String pStartDate,
+                                    @QueryParam("pEndDate") String pEndDate) {
                            System.out.println("hello");
                            if (pApiAuthKey==null || !(pApiAuthKey.equals(DEPLOYAPIACCESSKEY))) {
                    return "{\n \"ReturnCode\":\"00\",\"LatestSaleInfoResult\":[" + "\"Not Authorized\"" + "]\n}";
@@ -299,8 +307,8 @@ public class ERPSolDeployAPI {
                                          ApplicationModule am = Configuration.createRootApplicationModule(amDef, config);
                                          ViewObject vo = am.findViewObject("VwLatestSaleApiRO");
                                          String strWhereClause="confirm_date between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') ";
-                                         strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei1= qrslt.imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')";
-                                         strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei2= qrslt.imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')";
+                                         strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei1= imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd'))";
+                                         strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei2= imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd'))";
                                          
                                          if (pProductId!=null) {
                                             strWhereClause += " and ProductID='" + pProductId + "'";
@@ -314,29 +322,30 @@ public class ERPSolDeployAPI {
                                          if(pGroupId!=null){
                                             strWhereClause += " and SIGroupID='" + pGroupId + "'";
                                             } 
-                                         System.out.println(vo.getWhereClause());
+                                        
                                          vo.setWhereClause(strWhereClause);
-
+                                         System.out.println(vo.getWhereClause());
+                                         vo.executeQuery();
                                          while (vo.hasNext()) {
                                              Row r = vo.next();
                                              if (countryinfo == null) {
                                                  countryinfo =
                                                      "{\"Productid\":\"" + r.getAttribute("Productid") + 
                                                      "\",\"ModelNo\":\"" + r.getAttribute("ModelNo") +
-                                                     "\",\"Groupid\":\"" + r.getAttribute("Groupid") + "\"" +
-                                                     ",\"GroupName\":\"" + r.getAttribute("GroupName") + "\"" +
-                                                     ",\"Divid\":\"" +r.getAttribute("Divid") + "\"" +
-                                                 ",\"DivName\":\"" +r.getAttribute("DivName") +
+                                                     "\",\"CustomerId\":\"" + r.getAttribute("Customerid") + "\"" +
+                                                     ",\"CustomerName\":\"" + r.getAttribute("Cname") + "\"" +
+                                                     ",\"ConfirmDate\":\"" +r.getAttribute("ConfirmDate") + "\"" +
+                                                 ",\"ActiveQty\":\"" +r.getAttribute("ActiveQty") +
                                                      "\"}";
                                                  ////  System.out.println(countryinfo);
                                              } else {
                                                  countryinfo +=
                                                  "\n ,{\"Productid\":\"" + r.getAttribute("Productid") + 
                                                  "\",\"ModelNo\":\"" + r.getAttribute("ModelNo") +
-                                                 "\",\"Groupid\":\"" + r.getAttribute("Groupid") + "\"" +
-                                                 ",\"GroupName\":\"" + r.getAttribute("GroupName") + "\"" +
-                                                 ",\"Divid\":\"" +r.getAttribute("Divid") + "\"" +
-                                                 ",\"DivName\":\"" +r.getAttribute("DivName") +
+                                                 "\",\"CustomerId\":\"" + r.getAttribute("Customerid") + "\"" +
+                                                 ",\"CustomerName\":\"" + r.getAttribute("Cname") + "\"" +
+                                                 ",\"ConfirmDate\":\"" +r.getAttribute("ConfirmDate") + "\"" +
+                                                 ",\"ActiveQty\":\"" +r.getAttribute("ActiveQty") +
                                                  "\"}";
                                                  
                                              }
