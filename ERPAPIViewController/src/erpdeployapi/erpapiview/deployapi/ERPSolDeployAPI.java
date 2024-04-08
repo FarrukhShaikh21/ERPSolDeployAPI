@@ -285,7 +285,7 @@ public class ERPSolDeployAPI {
                                      return result;
                        } 
     
-        public String getLatestSale(String pApiAuthKey) {
+        public String getLatestSale(String pApiAuthKey,String pCustomerId,String pProductId,String pDivId, String pGroupId, String pStartDate, String pEndDate) {
                            System.out.println("hello");
                            if (pApiAuthKey==null || !(pApiAuthKey.equals(DEPLOYAPIACCESSKEY))) {
                    return "{\n \"ReturnCode\":\"00\",\"LatestSaleInfoResult\":[" + "\"Not Authorized\"" + "]\n}";
@@ -298,6 +298,24 @@ public class ERPSolDeployAPI {
                                          String config = "ERPAPIAppModuleLocal";
                                          ApplicationModule am = Configuration.createRootApplicationModule(amDef, config);
                                          ViewObject vo = am.findViewObject("VwLatestSaleApiRO");
+                                         String strWhereClause="confirm_date between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') ";
+                                         strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei1= qrslt.imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')";
+                                         strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei2= qrslt.imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')";
+                                         
+                                         if (pProductId!=null) {
+                                            strWhereClause += " and ProductID='" + pProductId + "'";
+                                         }
+                                         if(pCustomerId!=null){
+                                            strWhereClause += " and CustomerID='" + pCustomerId + "'";
+                                            }
+                                         if(pDivId!=null){
+                                            strWhereClause += " and DIVID='" + pDivId + "'";
+                                            } 
+                                         if(pGroupId!=null){
+                                            strWhereClause += " and SIGroupID='" + pGroupId + "'";
+                                            } 
+                                         System.out.println(vo.getWhereClause());
+                                         vo.setWhereClause(strWhereClause);
 
                                          while (vo.hasNext()) {
                                              Row r = vo.next();
