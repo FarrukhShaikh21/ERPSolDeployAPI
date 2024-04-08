@@ -305,11 +305,58 @@ public class ERPSolDeployAPI {
                                          String amDef = "erpdeployapi.erpapimodel.erpapiam.ERPAPIAppModule";
                                          String config = "ERPAPIAppModuleLocal";
                                          ApplicationModule am = Configuration.createRootApplicationModule(amDef, config);
-                                         ViewObject vo = am.findViewObject("VwLatestSaleApiRO");
-                                         String strWhereClause="confirm_date between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') ";
-                                         strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei1= imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd'))";
-                                         strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei2= imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd'))";
-                                         
+//                                         ViewObject vo = am.findViewObject("VwLatestSaleApiRO");
+                                         ViewObject vo = am.findViewObject("VwLatestSaleApiQVO");
+                                         if (vo!=null) {
+                                        vo.remove();
+                                   }
+                                         String strPlsql="WITH LatestSales AS (\n" + 
+                                         "            -- The same CTE as before\n" + 
+                                         "            SELECT soimei.imei_no, MAX(so.confirm_date) AS latest_sale_date\n" + 
+                                         "            FROM so_sales_order so, so_sales_order_lines sol, so_sales_order_imei soimei\n" + 
+                                         "            WHERE so.salesorderid = sol.salesorderid\n" + 
+                                         "              AND sol.salesorderid = soimei.salesorderid AND sol.lineno = soimei.line_no\n" + 
+                                         "                 GROUP BY soimei.imei_no\n" + 
+                                         "        )\n" + 
+                                         "\n" + 
+                                         "SELECT t.model_no Model_No,\n" + 
+                                         "       count(soimei.imei_no) Active_Qty,\n" + 
+                                         "       so.customerid,\n" + 
+                                         "       CUSTNAME(so.customerid) Cname,\n" + 
+                                         "       soimei.imei_no IMEI_NO,\n" + 
+                                         "       sol.Productid\n" + 
+                                         "  FROM so_sales_order       so,\n" + 
+                                         "       so_sales_order_lines sol,\n" + 
+                                         "       so_sales_order_imei  soimei,\n" + 
+                                         "       LatestSales          LS,\n" + 
+                                         "       in_items             t\n" + 
+                                         " WHERE so.salesorderid = sol.salesorderid\n" + 
+                                         "   AND sol.salesorderid = soimei.salesorderid\n" + 
+                                         "   AND sol.lineno = soimei.line_no\n" + 
+                                         "   AND soimei.imei_no = LS.imei_no\n" + 
+                                         "   AND so.confirm_date = LS.latest_sale_date\n" + 
+                                         "   and sol.productid = t.productid\n" + 
+                                         "   AND NOT EXISTS\n" + 
+                                         " (SELECT 1\n" + 
+                                         "          FROM so_sales_return sr, so_sales_return_lines srl, srimei srim\n" + 
+                                         "         WHERE sr.salesretid = srl.salesretid\n" + 
+                                         "           AND srl.srdetlid = srim.srdetlid\n" + 
+                                         "           AND srim.imei_no = soimei.imei_no\n" + 
+                                         "           AND sr.return_date > so.confirm_date)\n" + 
+                                         " and not EXISTS ( select 1 from active_imei m where m.imei1= soimei.imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')) " + 
+                                         "and not EXISTS ( select 1 from active_imei m where m.imei2= soimei.imei_no   and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')) " + 
+                                        "AND     sol.ProductID = NVL('"+(pProductId==null?"":pProductId)+"', sol.ProductID)\n" + 
+                                         "    AND so.CustomerID = NVL('"+(pCustomerId==null?"":pCustomerId)+"',so.CustomerID)\n" + 
+                                         " AND    so.confirm_date  between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') " + 
+                                         " AND     T.SIGroupID = NVL('"+(pGroupId==null?"":pGroupId)+"', T.SIGroupID)\n" + 
+                                         " AND     T.DIVID = NVL('"+(pDivId==null?"":pDivId)+"', T.DIVID)\n" + 
+                                         " GROUP BY  soimei.imei_no,t.model_no, so.customerid,sol.ProductID " + 
+                                         " ORDER BY 1 ";
+                                         vo=am.createViewObjectFromQueryStmt("VwLatestSaleApiQVO", strPlsql);
+                                        // String strWhereClause="confirm_date between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') ";
+                                        // strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei1= imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd'))";
+                                         //strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei2= imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd'))";
+                                         /*
                                          if (pProductId!=null) {
                                             strWhereClause += " and ProductID='" + pProductId + "'";
                                          }
@@ -321,38 +368,41 @@ public class ERPSolDeployAPI {
                                             } 
                                          if(pGroupId!=null){
                                             strWhereClause += " and SIGroupID='" + pGroupId + "'";
-                                            } 
-                                        
-                                         vo.setWhereClause(strWhereClause);
-                                         System.out.println(vo.getWhereClause());
+                                            } */
+//                                        System.out.println(vo.getAttributeDef(0).getName());
+//                                         System.out.println(vo.getAttributeDef(1).getName());
+//                                         System.out.println(vo.getAttributeDef(2).getName());
+//                                         System.out.println(vo.getAttributeDef(3).getName());
+//                                         System.out.println(vo.getAttributeDef(4).getName());
+//                                         System.out.println(vo.getAttributeDef(5).getName());
+                                        // vo.setWhereClause(strWhereClause);
+//                                         System.out.println(vo.getWhereClause());
                                          vo.executeQuery();
                                          while (vo.hasNext()) {
                                              Row r = vo.next();
                                              if (countryinfo == null) {
                                                  countryinfo =
-                                                     "{\"Productid\":\"" + r.getAttribute("Productid") + 
-                                                     "\",\"ModelNo\":\"" + r.getAttribute("ModelNo") +
-                                                     "\",\"CustomerId\":\"" + r.getAttribute("Customerid") + "\"" +
-                                                     ",\"CustomerName\":\"" + r.getAttribute("Cname") + "\"" +
-                                                     ",\"ConfirmDate\":\"" +r.getAttribute("ConfirmDate") + "\"" +
-                                                 ",\"ActiveQty\":\"" +r.getAttribute("ActiveQty") +
+                                                     "{\"Productid\":\"" + r.getAttribute("PRODUCTID") + 
+                                                     "\",\"ModelNo\":\"" + r.getAttribute("MODEL_NO") +
+                                                     "\",\"CustomerId\":\"" + r.getAttribute("CUSTOMERID") + "\"" +
+                                                     ",\"CustomerName\":\"" + r.getAttribute("CNAME") + "\"" +
+                                                 ",\"ImeiNo\":\"" +r.getAttribute("IMEI_NO") +
                                                      "\"}";
                                                  ////  System.out.println(countryinfo);
                                              } else {
                                                  countryinfo +=
-                                                 "\n ,{\"Productid\":\"" + r.getAttribute("Productid") + 
-                                                 "\",\"ModelNo\":\"" + r.getAttribute("ModelNo") +
-                                                 "\",\"CustomerId\":\"" + r.getAttribute("Customerid") + "\"" +
-                                                 ",\"CustomerName\":\"" + r.getAttribute("Cname") + "\"" +
-                                                 ",\"ConfirmDate\":\"" +r.getAttribute("ConfirmDate") + "\"" +
-                                                 ",\"ActiveQty\":\"" +r.getAttribute("ActiveQty") +
+                                                 "\n ,{\"Productid\":\"" + r.getAttribute("PRODUCTID") + 
+                                                 "\",\"ModelNo\":\"" + r.getAttribute("MODEL_NO") +
+                                                 "\",\"CustomerId\":\"" + r.getAttribute("CUSTOMERID") + "\"" +
+                                                 ",\"CustomerName\":\"" + r.getAttribute("CNAME") + "\"" +
+                                                 ",\"ImeiNo\":\"" +r.getAttribute("IMEI_NO") +
                                                  "\"}";
                                                  
                                              }
                                          }
                                          // Work with your appmodule and view object here
                                          Configuration.releaseRootApplicationModule(am, true);
-                                         System.out.println("this is wscalling-end");
+//                                         System.out.println("this is wscalling-end");
                                      } finally {
                                          ADFContext.resetADFContext(oldContext);
                                      }
