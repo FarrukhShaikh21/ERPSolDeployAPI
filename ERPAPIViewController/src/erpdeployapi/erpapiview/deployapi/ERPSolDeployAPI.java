@@ -284,5 +284,54 @@ public class ERPSolDeployAPI {
                                      String result = "{\n \"ReturnCode\":\"00\",\"SaleReturnInfoResult\":[" + countryinfo + " \n]\n}";
                                      return result;
                        } 
+    
+        public String getLatestSale(String pApiAuthKey) {
+                           System.out.println("hello");
+                           if (pApiAuthKey==null || !(pApiAuthKey.equals(DEPLOYAPIACCESSKEY))) {
+                   return "{\n \"ReturnCode\":\"00\",\"LatestSaleInfoResult\":[" + "\"Not Authorized\"" + "]\n}";
+               }
+                                     ADFContext oldContext = ADFContext.initADFContext(null, null, null, null);
+                                     String countryinfo = null;
+                                     try {
+                                         // System.out.println("this is GhsStGenCustomerVORO");
+                                         String amDef = "erpdeployapi.erpapimodel.erpapiam.ERPAPIAppModule";
+                                         String config = "ERPAPIAppModuleLocal";
+                                         ApplicationModule am = Configuration.createRootApplicationModule(amDef, config);
+                                         ViewObject vo = am.findViewObject("VwLatestSaleApiRO");
+
+                                         while (vo.hasNext()) {
+                                             Row r = vo.next();
+                                             if (countryinfo == null) {
+                                                 countryinfo =
+                                                     "{\"Productid\":\"" + r.getAttribute("Productid") + 
+                                                     "\",\"ModelNo\":\"" + r.getAttribute("ModelNo") +
+                                                     "\",\"Groupid\":\"" + r.getAttribute("Groupid") + "\"" +
+                                                     ",\"GroupName\":\"" + r.getAttribute("GroupName") + "\"" +
+                                                     ",\"Divid\":\"" +r.getAttribute("Divid") + "\"" +
+                                                 ",\"DivName\":\"" +r.getAttribute("DivName") +
+                                                     "\"}";
+                                                 ////  System.out.println(countryinfo);
+                                             } else {
+                                                 countryinfo +=
+                                                 "\n ,{\"Productid\":\"" + r.getAttribute("Productid") + 
+                                                 "\",\"ModelNo\":\"" + r.getAttribute("ModelNo") +
+                                                 "\",\"Groupid\":\"" + r.getAttribute("Groupid") + "\"" +
+                                                 ",\"GroupName\":\"" + r.getAttribute("GroupName") + "\"" +
+                                                 ",\"Divid\":\"" +r.getAttribute("Divid") + "\"" +
+                                                 ",\"DivName\":\"" +r.getAttribute("DivName") +
+                                                 "\"}";
+                                                 
+                                             }
+                                         }
+                                         // Work with your appmodule and view object here
+                                         Configuration.releaseRootApplicationModule(am, true);
+                                         System.out.println("this is wscalling-end");
+                                     } finally {
+                                         ADFContext.resetADFContext(oldContext);
+                                     }
+
+                                     String result = "{\n \"ReturnCode\":\"00\",\"LatestSaleInfoResult\":[" + countryinfo + " \n]\n}";
+                                     return result;
+                       }
     }
 

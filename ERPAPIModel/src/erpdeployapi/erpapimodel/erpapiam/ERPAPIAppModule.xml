@@ -19,4 +19,7 @@
   <ViewUsage
     Name="VwSaleReturnApiRO"
     ViewObjectName="erpdeployapi.erpapimodel.erpapivo.VwSaleReturnApiVO"/>
+  <ViewUsage
+    Name="VwLatestSaleApiRO"
+    ViewObjectName="erpdeployapi.erpapimodel.erpapivo.VwLatestSaleApiVO"/>
 </AppModule>

@@ -17,8 +17,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_LATEST_SALE_API"
-    PrimaryKey="true">
+    TableName="VW_LATEST_SALE_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="50"/>
     </DesignTime>
@@ -29,8 +28,7 @@
     SQLType="NUMERIC"
     Type="java.math.BigDecimal"
     ColumnType="NUMBER"
-    TableName="VW_LATEST_SALE_API"
-    PrimaryKey="true"/>
+    TableName="VW_LATEST_SALE_API"/>
   <Attribute
     Name="Customerid"
     IsNotNull="true"
@@ -52,8 +50,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_LATEST_SALE_API"
-    PrimaryKey="true">
+    TableName="VW_LATEST_SALE_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="4000"/>
     </DesignTime>
@@ -89,10 +86,9 @@
     Name="ConfirmDate"
     ColumnName="CONFIRM_DATE"
     SQLType="DATE"
-    Type="java.sql.Timestamp"
+    Type="oracle.jbo.domain.Date"
     ColumnType="DATE"
-    TableName="VW_LATEST_SALE_API"
-    PrimaryKey="true"/>
+    TableName="VW_LATEST_SALE_API"/>
   <Attribute
     Name="Divid"
     Precision="5"
@@ -100,8 +96,7 @@
     SQLType="VARCHAR"
     Type="java.lang.String"
     ColumnType="VARCHAR2"
-    TableName="VW_LATEST_SALE_API"
-    PrimaryKey="true">
+    TableName="VW_LATEST_SALE_API">
     <DesignTime>
       <Attr Name="_DisplaySize" Value="5"/>
     </DesignTime>
@@ -113,14 +108,9 @@
       <Attr Name="_DBObjectName" Value="VWLATESTSALEAPI_PRIMARY_KEY"/>
     </DesignTime>
     <AttrArray Name="Attributes">
-      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwLatestSaleApi.ModelNo"/>
-      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwLatestSaleApi.ActiveQty"/>
       <Item Value="erpdeployapi.erpapimodel.erpapieo.VwLatestSaleApi.Customerid"/>
-      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwLatestSaleApi.Cname"/>
-      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwLatestSaleApi.ImeiNo"/>
       <Item Value="erpdeployapi.erpapimodel.erpapieo.VwLatestSaleApi.Productid"/>
-      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwLatestSaleApi.ConfirmDate"/>
-      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwLatestSaleApi.Divid"/>
+      <Item Value="erpdeployapi.erpapimodel.erpapieo.VwLatestSaleApi.ImeiNo"/>
     </AttrArray>
   </Key>
 </Entity>
