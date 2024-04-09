@@ -344,7 +344,8 @@ public class ERPSolDeployAPI {
                                          "           AND srim.imei_no = soimei.imei_no\n" + 
                                          "           AND sr.return_date > so.confirm_date)\n" + 
                                          " and not EXISTS ( select 1 from active_imei m where m.imei1= soimei.imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')) " + 
-                                         "and not EXISTS ( select 1 from active_imei m where m.imei2= soimei.imei_no   and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')) " + 
+                                         " and not EXISTS ( select 1 from active_imei m where m.imei2= soimei.imei_no   and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')) " + 
+                                         " AND t.SIGroupID  in ('013','011') "  +             
                                         "AND     sol.ProductID = NVL('"+(pProductId==null?"":pProductId)+"', sol.ProductID)\n" + 
                                          "    AND so.CustomerID = NVL('"+(pCustomerId==null?"":pCustomerId)+"',so.CustomerID)\n" + 
                                          " AND    so.confirm_date  between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') " + 
