@@ -343,8 +343,8 @@ public class ERPSolDeployAPI {
                                          "           AND srl.srdetlid = srim.srdetlid\n" + 
                                          "           AND srim.imei_no = soimei.imei_no\n" + 
                                          "           AND sr.return_date > so.confirm_date)\n" + 
-                                         " and not EXISTS ( select 1 from active_imei m where m.imei1= soimei.imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')) " + 
-                                         " and not EXISTS ( select 1 from active_imei m where m.imei2= soimei.imei_no   and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd')) " + 
+                                         " and not EXISTS ( select 1 from active_imei m where m.imei1= soimei.imei_no)  " + 
+                                         " and not EXISTS ( select 1 from active_imei m where m.imei2= soimei.imei_no)  " + 
                                          " AND t.SIGroupID  in ('013','011') "  +             
                                         "AND     sol.ProductID = NVL('"+(pProductId==null?"":pProductId)+"', sol.ProductID)\n" + 
                                          "    AND so.CustomerID = NVL('"+(pCustomerId==null?"":pCustomerId)+"',so.CustomerID)\n" + 
@@ -377,7 +377,7 @@ public class ERPSolDeployAPI {
 //                                         System.out.println(vo.getAttributeDef(4).getName());
 //                                         System.out.println(vo.getAttributeDef(5).getName());
                                         // vo.setWhereClause(strWhereClause);
-//                                         System.out.println(vo.getWhereClause());
+                                         System.out.println(vo.getQuery());
                                          vo.executeQuery();
                                          while (vo.hasNext()) {
                                              Row r = vo.next();
