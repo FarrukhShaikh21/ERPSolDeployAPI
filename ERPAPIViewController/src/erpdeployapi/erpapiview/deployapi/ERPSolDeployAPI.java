@@ -310,49 +310,42 @@ public class ERPSolDeployAPI {
                                          if (vo!=null) {
                                         vo.remove();
                                    }
-                                         String strPlsql="WITH LatestSales AS (\n" + 
-                                         "            -- The same CTE as before\n" + 
-                                         "            SELECT soimei.imei_no, MAX(so.confirm_date) AS latest_sale_date\n" + 
-                                         "            FROM so_sales_order so, so_sales_order_lines sol, so_sales_order_imei soimei\n" + 
-                                         "            WHERE so.salesorderid = sol.salesorderid\n" + 
-                                         "              AND sol.salesorderid = soimei.salesorderid AND sol.lineno = soimei.line_no\n" + 
-                                         "                 GROUP BY soimei.imei_no\n" + 
-                                         "        )\n" + 
-                                         "\n" + 
-                                         "SELECT t.model_no Model_No,\n" + 
-                                         "       count(soimei.imei_no) Active_Qty,\n" + 
-                                         "       so.customerid,\n" + 
-                                         "       CUSTNAME(so.customerid) Cname,\n" + 
-                                         "       soimei.imei_no IMEI_NO,\n" + 
-                                         "       sol.Productid\n" + 
-                                         "  FROM so_sales_order       so,\n" + 
-                                         "       so_sales_order_lines sol,\n" + 
-                                         "       so_sales_order_imei  soimei,\n" + 
-                                         "       LatestSales          LS,\n" + 
-                                         "       in_items             t\n" + 
-                                         " WHERE so.salesorderid = sol.salesorderid\n" + 
-                                         "   AND sol.salesorderid = soimei.salesorderid\n" + 
-                                         "   AND sol.lineno = soimei.line_no\n" + 
-                                         "   AND soimei.imei_no = LS.imei_no\n" + 
-                                         "   AND so.confirm_date = LS.latest_sale_date\n" + 
-                                         "   and sol.productid = t.productid\n" + 
-                                         "   AND NOT EXISTS\n" + 
-                                         " (SELECT 1\n" + 
-                                         "          FROM so_sales_return sr, so_sales_return_lines srl, srimei srim\n" + 
-                                         "         WHERE sr.salesretid = srl.salesretid\n" + 
-                                         "           AND srl.srdetlid = srim.srdetlid\n" + 
-                                         "           AND srim.imei_no = soimei.imei_no\n" + 
-                                         "           AND sr.return_date > so.confirm_date)\n" + 
-                                         " and not EXISTS ( select 1 from active_imei m where m.imei1= soimei.imei_no)  " + 
-                                         " and not EXISTS ( select 1 from active_imei m where m.imei2= soimei.imei_no)  " + 
-                                         " AND t.SIGroupID  in ('013','011') "  +             
-                                        "AND     sol.ProductID = NVL('"+(pProductId==null?"":pProductId)+"', sol.ProductID)\n" + 
-                                         "    AND so.CustomerID = NVL('"+(pCustomerId==null?"":pCustomerId)+"',so.CustomerID)\n" + 
+                                         String strPlsql=""+ 
+                                         "SELECT  MODEL_NO,COUNT(IMEI)ACTIVE_QTY, DEALER CUSTOMERID, CUSTNAME(DEALER) CNAME, IMEI IMEI_NO,PRODUCTID \n"+
+                                        "FROM (\n"+
+                                         "SELECT  COUNT(SOIMEI.IMEI_NO) SIMEI, SO.CUSTOMERID DEALER,SOL.PRODUCTID,(SOIMEI.IMEI_NO) IMEI,SOL.MODEL_NO,IT.SIGROUPID \n"+
+                                         " FROM  SO_SALES_ORDER SO, \n"+
+                                         "SO_SALES_ORDER_LINES SOL,\n"+
+                                         "SO_SALES_ORDER_IMEI SOIMEI, IN_ITEMS IT \n"+
+                                         "WHERE SOL.SALESORDERID=SO.SALESORDERID \n"+
+                                         "AND SOL.PRODUCTID = IT.PRODUCTID \n"+
+                                         "AND   SOL.SALESORDERID=SOIMEI.SALESORDERID \n"+
+                                         "AND   SOL.LINENO=SOIMEI.LINE_NO \n"+
+                                         "AND SO.POSTED='Y' \n"+
+                                         "AND  IT.SIGROUPID IN ('011','013','011')\n"+
+                                         "AND SO.CONFIRM_DATE between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') " + 
+                                         "GROUP BY  SO.CUSTOMERID,SOL.PRODUCTID,(SOIMEI.IMEI_NO),SOL.MODEL_NO, IT.SIGROUPID \n"+
+                                          " MINUS \n"+
+                                         "SELECT COUNT(SRIM.IMEI_NO) SIMEI, SR.CUSTOMERID DEALER,SRL.PRODUCTID,(SRIM.IMEI_NO) IMEI ,SRL.MODEL_NO,IT.SIGROUPID \n"+
+                                         "FROM SO_SALES_RETURN SR,SO_SALES_RETURN_LINES SRL,     SRIMEI SRIM, IN_ITEMS IT \n"+
+                                         "WHERE SR.SALESRETID=SRL.SALESRETID     \n"+
+                                         "AND   SRL.SRDETLID=SRIM.SRDETLID \n"+
+                                         "AND SR.POSTED='Y' \n"+
+                                         "AND     SRL.PRODUCTID = IT.PRODUCTID   \n"+
+                                         "AND  IT.SIGROUPID IN ('011','013','011') \n"+
+                                         "AND SR.RETURN_DATE between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') " + 
+                                          "  GROUP BY  SR.CUSTOMERID,SRL.PRODUCTID,(SRIM.IMEI_NO)  ,SRL.MODEL_NO,IT.SIGROUPID) \n"+
+                                          "  GROUP BY  MODEL_NO,DEALER, CUSTNAME(DEALER), IMEI,PRODUCTID \n"+
+                                          "  ORDER BY 1,5 ";
+
+
+                                         
+                                         /*
                                          " AND    so.confirm_date  between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') " + 
                                          " AND     T.SIGroupID = NVL('"+(pGroupId==null?"":pGroupId)+"', T.SIGroupID)\n" + 
                                          " AND     T.DIVID = NVL('"+(pDivId==null?"":pDivId)+"', T.DIVID)\n" + 
                                          " GROUP BY  soimei.imei_no,t.model_no, so.customerid,sol.ProductID " + 
-                                         " ORDER BY 1 ";
+                                         " ORDER BY 1 ";*/
                                          vo=am.createViewObjectFromQueryStmt("VwLatestSaleApiQVO", strPlsql);
                                         // String strWhereClause="confirm_date between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') ";
                                         // strWhereClause+=" and not EXISTS ( select 1 from active_imei m where m.imei1= imei_no  and  TRUNC(m.ACTIVE_DATE_DATE) between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd'))";
