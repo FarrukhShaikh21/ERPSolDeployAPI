@@ -322,7 +322,7 @@ public class ERPSolDeployAPI {
                                          "AND   SOL.SALESORDERID=SOIMEI.SALESORDERID \n"+
                                          "AND   SOL.LINENO=SOIMEI.LINE_NO \n"+
                                          "AND SO.POSTED='Y' \n"+
-                                         "AND  IT.SIGROUPID IN ('011','013','011')\n"+
+                                         "AND  IT.SIGROUPID IN ('011','013','011','012')\n"+
                                          "AND SO.CONFIRM_DATE between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') " + 
                                          "GROUP BY  SO.CUSTOMERID,SOL.PRODUCTID,(SOIMEI.IMEI_NO),SOL.MODEL_NO, IT.SIGROUPID \n"+
                                           " MINUS \n"+
@@ -332,7 +332,7 @@ public class ERPSolDeployAPI {
                                          "AND   SRL.SRDETLID=SRIM.SRDETLID \n"+
                                          "AND SR.POSTED='Y' \n"+
                                          "AND     SRL.PRODUCTID = IT.PRODUCTID   \n"+
-                                         "AND  IT.SIGROUPID IN ('011','013','011') \n"+
+                                         "AND  IT.SIGROUPID IN ('011','013','011','012') \n"+
                                          "AND SR.RETURN_DATE between TO_DATE('"+pStartDate+"','yyyy-mm-dd') AND TO_DATE('"+pEndDate+"','yyyy-mm-dd') " + 
                                           "  GROUP BY  SR.CUSTOMERID,SRL.PRODUCTID,(SRIM.IMEI_NO)  ,SRL.MODEL_NO,IT.SIGROUPID) \n"+
                                           "  GROUP BY  MODEL_NO,DEALER, CUSTNAME(DEALER), IMEI,PRODUCTID \n"+
